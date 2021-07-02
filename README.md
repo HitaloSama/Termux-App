@@ -1,6 +1,7 @@
 # Termux application
 
 [![Build status](https://github.com/HitaloSama/Termux-App/workflows/Build/badge.svg)](https://github.com/HitaloSama/Termux-App/actions)
+[![Testing status](https://github.com/HitaloSama/Termux-App/workflows/Unit%20tests/badge.svg)](https://github.com/HitaloSama/Termux-App/actions)
 
 This is a clone of the Termux repository for automatic builds that will be sent to Telegram.
 
@@ -14,7 +15,7 @@ Quick how-to about Termux package management is available at [Package Management
 
 ## Downloads
 
-- [@TermuxCI (UNOFFICIAL) on Telegram](https://t.me/TermuxCI)
+- [@TermuxCI on Telegram](https://t.me/TermuxCI)
 
 To install these builds available on Telegram you must uninstall Termux from the Play Store or F-Froid.
 It is also necessary that any installed Termux add-on is also uninstalled.

@@ -27,18 +27,21 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.9.4'
+        python-version: '3.9.5'
  
     - name: Install Python requirements
       run: |
-        pip install pip setuptools wheel pyrogram tgcrypto -U
+        pip install pip setuptools wheel -U
+        pip install pyrogram tgcrypto -U
 
     - name: Build
       run: |
         ./gradlew assembleDebug
 
-    - name: Save some VARS
+    - name: Save some env vars
       run: |
+        git clone https://github.com/termux/termux-app termux-app
+        cd termux-app
         echo "SHORT_REV=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
         echo "LONG_REV=$(git rev-parse HEAD)" >> $GITHUB_ENV
         echo "BRANCH=$(sed 's/-/_/g' <<< `git rev-parse --abbrev-ref HEAD`)" >> $GITHUB_ENV
