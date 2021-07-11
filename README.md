@@ -1,10 +1,8 @@
 # Termux application
 
-[![Build status](https://github.com/termux/termux-app/workflows/Build/badge.svg)](https://github.com/termux/termux-app/actions)
-[![Testing status](https://github.com/termux/termux-app/workflows/Unit%20tests/badge.svg)](https://github.com/termux/termux-app/actions)
-[![Join the chat at https://gitter.im/termux/termux](https://badges.gitter.im/termux/termux.svg)](https://gitter.im/termux/termux)
-[![Termux library releases at Jitpack](https://jitpack.io/v/termux/termux-app.svg)](https://jitpack.io/#termux/termux-app)
+[![Build status](https://github.com/HitaloSama/Termux-App/workflows/Build/badge.svg)](https://github.com/HitaloSama/Termux-App/actions)
 
+This is a clone of the Termux repository for automatic builds that will be sent to Telegram.
 
 [Termux](https://termux.com) is an Android terminal application and Linux environment.
 
@@ -14,11 +12,14 @@ Quick how-to about Termux package management is available at [Package Management
 
 ***
 
-**@termux is looking for Termux Application maintainers for implementing new features, fixing bugs and reviewing pull requests since the current one (@fornwall) is inactive.**
+## Downloads
 
-Issue https://github.com/termux/termux-app/issues/1072 needs extra attention.
+- [@TermuxCI (UNOFFICIAL) on Telegram](https://t.me/TermuxCI)
 
-***
+To install these builds available on Telegram you must uninstall Termux from the Play Store or F-Froid.
+It is also necessary that any installed Termux add-on is also uninstalled.
+##
+
 
 ### Contents
 - [Termux App and Plugins](#Termux-App-and-Plugins)

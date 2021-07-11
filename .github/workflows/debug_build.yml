@@ -2,55 +2,64 @@ name: Build
 
 on:
   push:
-    branches:
-      - master
-      - android-10
-  pull_request:
-    branches:
-      - master
-      - android-10
+    paths-ignore:
+      - '*.md'
+      - '*.yml'
+    branches: [ master ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+
     steps:
     - name: Clone repository
       uses: actions/checkout@v2
+
+    - name: Set up Java
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9.4'
+ 
+    - name: Install Python requirements
+      run: |
+        pip install pip setuptools wheel pyrogram tgcrypto -U
+
     - name: Build
       run: |
         ./gradlew assembleDebug
-    - name: Store generated universal APK file
-      uses: actions/upload-artifact@v2
-      with:
-        name: termux-app-universal
-        path: |
-            ./app/build/outputs/apk/debug/app-universal-debug.apk
-            ./app/build/outputs/apk/debug/output-metadata.json
-    - name: Store generated arm64-v8a APK file
-      uses: actions/upload-artifact@v2
-      with:
-        name: termux-app-arm64-v8a
-        path: |
-          ./app/build/outputs/apk/debug/app-arm64-v8a-debug.apk
-          ./app/build/outputs/apk/debug/output-metadata.json
-    - name: Store generated armeabi-v7a APK file
-      uses: actions/upload-artifact@v2
-      with:
-        name: termux-app-armeabi-v7a
-        path: |
-          ./app/build/outputs/apk/debug/app-armeabi-v7a-debug.apk
-          ./app/build/outputs/apk/debug/output-metadata.json
-    - name: Store generated x86_64 APK file
-      uses: actions/upload-artifact@v2
-      with:
-        name: termux-app-x86_64
-        path: |
-          ./app/build/outputs/apk/debug/app-x86_64-debug.apk
-          ./app/build/outputs/apk/debug/output-metadata.json
-    - name: Store generated x86 APK file
-      uses: actions/upload-artifact@v2
-      with:
-        name: termux-app-x86
-        path: |
-          ./app/build/outputs/apk/debug/app-x86-debug.apk
-          ./app/build/outputs/apk/debug/output-metadata.json
+
+    - name: Save some VARS
+      run: |
+        echo "SHORT_REV=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+        echo "LONG_REV=$(git rev-parse HEAD)" >> $GITHUB_ENV
+        echo "BRANCH=$(sed 's/-/_/g' <<< `git rev-parse --abbrev-ref HEAD`)" >> $GITHUB_ENV
+        echo "TIME=$(sed 's/-/_/g' <<< `git log -1 --format=%cd`)" >> $GITHUB_ENV
+        echo "MD5=$(echo -n "./app/build/outputs/apk/debug/app-debug.apk" | md5sum)" >> $GITHUB_ENV
+        echo "SHA256=$(echo -n "./app/build/outputs/apk/debug/app-debug.apk" | sha256sum)" >> $GITHUB_ENV
+
+    - name: Send a sticker separator before the APK
+      env:
+        CHAT_ID: ${{ secrets.CHAT_ID }}
+        BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+        API_ID: ${{ secrets.API_ID }}
+        API_HASH: ${{ secrets.API_HASH }}
+      run: |
+        python .github/workflows/send_sticker.py
+
+    - name: Upload the APK to Telegram
+      env:
+        CHAT_ID: ${{ secrets.CHAT_ID }}
+        BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+        API_ID: ${{ secrets.API_ID }}
+        API_HASH: ${{ secrets.API_HASH }}
+      run: |
+        python .github/workflows/upload.py
